@@ -1,0 +1,13 @@
+*.egg-info
+*.pyc
+.*cache
+.envrc
+.coverage
+.python-version
+poetry.lock
+.idea/
+.tox/
+build/
+dist/
+htmlcov/
+venv/

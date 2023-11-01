@@ -1,0 +1,77 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  autorelease:
+    name: Create release
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.12"
+      - name: Install latest version of Poetry
+        run: |
+          pipx install poetry
+          ls /opt
+          ls /opt/pipx_bin
+          which poetry
+      - name: Add Poetry to $PATH
+        run: |
+          echo "/opt"
+          ls /opt
+          echo "/opt/pipx"
+          ls /opt/pipx
+          echo "/opt/pipx_bin"
+          ls /opt/pipx_bin
+          ls -l /opt/pipx_bin/poetry
+          echo "/opt/pipx_bin" >> $GITHUB_PATH
+          which poetry
+      - name: Get Poetry version
+        run: |
+          poetry --version
+      - name: Add version to environment vars
+        run: |
+          PROJECT_VERSION=$(poetry version --short)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+      - name: Check if tag version matches project version
+        run: |
+          TAG=$(git describe HEAD --tags --abbrev=0)
+          echo $TAG
+          echo $PROJECT_VERSION
+          if [[ "$TAG" != "v$PROJECT_VERSION" ]]; then exit 1; fi
+      - name: Check pyproject.toml validity
+        run: poetry check --no-interaction
+      - name: Install deps
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --no-interaction
+      - name: Run tests
+        run: poetry run pytest -v
+      - name: Build
+        run: |
+          poetry build
+      - name: Release Notes
+        run: |
+          if (git describe HEAD~ --tags --abbrev=0); then
+            git log $(git describe HEAD~ --tags --abbrev=0)..HEAD --pretty='format:* %h %s%n  * %an <%ae>' --no-merges >> ".github/RELEASE-TEMPLATE.md"
+          else
+            touch .github/RELEASE-TEMPLATE.md
+          fi
+      - name: Create Release Draft
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ".github/RELEASE-TEMPLATE.md"
+          draft: true
+          fail_on_unmatched_files: true
+          files: |
+            dist/django_bigredbutton-${{env.PROJECT_VERSION}}-py3-none-any.whl
+            dist/django_bigredbutton-${{env.PROJECT_VERSION}}.tar.gz

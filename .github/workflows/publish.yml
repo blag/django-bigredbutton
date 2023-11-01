@@ -1,0 +1,50 @@
+on:
+  release:
+    types:
+      - published
+
+name: PyPI Publish
+
+jobs:
+  publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi-release
+      url: https://pypi.org/p/django-bigredbutton
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.12"
+      - name: Install latest version of Poetry
+        run: |
+          pipx install poetry
+          ls /opt
+          ls /opt/pipx_bin
+          which poetry
+      - name: Add Poetry to $PATH
+        run: |
+          ls /opt
+          ls /opt/pipx_bin
+          ls -l /opt/pipx_bin/poetry
+          echo "/opt/pipx_bin" >> $GITHUB_PATH
+          which poetry
+      - name: Get Poetry version
+        run: |
+          poetry --version
+      - name: Check pyproject.toml validity
+        run: poetry check --no-interaction
+      - name: Install deps
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --no-interaction
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          print-hash: true
+          verbose: true

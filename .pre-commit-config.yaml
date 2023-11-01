@@ -1,0 +1,44 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.5.0"
+    hooks:
+      - id: trailing-whitespace # trims trailing whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer # ensures that a file is either empty, or ends with one newline
+      - id: check-yaml # checks syntax of yaml files
+      - id: check-json # checks syntax of json files
+      - id: check-toml # checks syntax of toml files
+      - id: check-added-large-files # prevent giant files from being committed
+      - id: end-of-file-fixer
+      - id: fix-encoding-pragma # removes "# -*- coding: utf-8 -*-" from python files (since we only support python 3)
+        args: [--remove]
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+      - id: check-merge-conflict # check for files that contain merge conflict strings
+
+  - repo: https://github.com/python-poetry/poetry
+    rev: "1.6.1"
+    hooks:
+      - id: poetry-check
+      # - id: poetry-install
+
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: "1.15.0"
+    hooks:
+      - id: django-upgrade
+        args: [--target-version, "3.2"]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: "v3.15.0"
+    hooks:
+      - id: pyupgrade
+        args: [--py37-plus]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.1.3
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]

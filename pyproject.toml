@@ -1,0 +1,68 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "django-bigredbutton"
+version = "0.1.0"
+description = "Django app that offers a big red button to sign out of all other user sessions"
+authors = ["blag <blag@users.noreply.github.com>"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Session",
+    "Topic :: Security",
+]
+packages = [
+	{include = "bigredbutton"},
+]
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+django = ">=4.0"
+# Also required by django-qsessions, but we use types provided from it, so we require it as well
+user-agents = ">=2.2.0"
+
+[tool.poetry.group.qsessions.dependencies]
+django-qsessions = ">=1.1.4"
+
+[tool.poetry.group.user-sessions.dependencies]
+django-user-sessions = ">=2.0.0"
+
+[tool.poetry.group.test.dependencies]
+aiohttp = ">=3.9.0b0"  # transitive dependency, previous versions are broken on Python 3.11/3.12
+coverage = {extras = ["toml"], version = "^7.3.2"}
+geoip2 = ">=4.7.0"
+pytest = ">=7.4.3"
+pytest-cov = ">=4.1.0"
+pytest-django = ">=4.6.0"
+
+[tool.coverage.run]
+branch = true
+source = [
+	"bigredbutton",
+]
+omit =[
+    "*venv*",
+	"*site-packages*",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+addopts = "--cov"
+norecursedirs = ".git"
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
