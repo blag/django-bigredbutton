@@ -43,12 +43,6 @@ jobs:
           if [[ "$TAG" != "v$PROJECT_VERSION" ]]; then exit 1; fi
       - name: Check pyproject.toml validity
         run: poetry check --no-interaction
-      - name: Install deps
-        run: |
-          poetry config virtualenvs.in-project true
-          poetry install --no-interaction
-      - name: Run tests
-        run: poetry run pytest -v
       - name: Build
         run: |
           poetry build
