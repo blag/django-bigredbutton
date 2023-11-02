@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-bigredbutton"
-version = "0.1.0"
+version = "0.1.1"
 description = "Django app that offers a big red button to sign out of all other user sessions"
 authors = ["blag <blag@users.noreply.github.com>"]
 readme = "README.md"
