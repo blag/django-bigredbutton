@@ -13,29 +13,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Install latest version of Poetry
+        run: |
+          pipx install poetry
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      # https://jacobian.org/til/github-actions-poetry/
-      - name: Cache poetry install
-        uses: actions/cache@v2
-        with:
-          path: ~/.local
-          key: poetry-1.6.1-${{ matrix.python-version }}-${{ matrix.django-version }}
-      - name: Install latest version of Poetry
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: |
-          pipx install poetry
-      - name: Install and cache dependencies
-        id: cache-deps
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: pydeps-${{ hashFiles('pyproject.toml') }}-${{ matrix.python-version }}-${{ matrix.django-version }}
-      - if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: |
-          poetry config virtualenvs.in-project true
+          cache: poetry
+          cache-dependency-path: pyproject.toml
+      - run: |
           poetry install --no-interaction --no-root
       - name: Run tests
         run: |

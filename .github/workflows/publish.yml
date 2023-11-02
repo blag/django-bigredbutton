@@ -17,25 +17,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.12"
       - name: Install latest version of Poetry
         run: |
           pipx install poetry
-          ls /opt
-          ls /opt/pipx_bin
-          which poetry
-      - name: Add Poetry to $PATH
-        run: |
-          ls /opt
-          ls /opt/pipx_bin
-          ls -l /opt/pipx_bin/poetry
-          echo "/opt/pipx_bin" >> $GITHUB_PATH
-          which poetry
+          dirname $(which poetry) >> $GITHUB_PATH
+          echo "GITHUB_PATH:"
+          cat $GITHUB_PATH
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+          cache: poetry
+          cache-dependency-path: pyproject.toml
       - name: Get Poetry version
         run: |
+          echo "GITHUB_PATH:"
+          cat $GITHUB_PATH
           poetry --version
       - name: Check pyproject.toml validity
         run: poetry check --no-interaction
