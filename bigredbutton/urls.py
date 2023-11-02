@@ -7,6 +7,6 @@ from .views import (
 
 
 urlpatterns = [
-    path('sessions/', SessionList.as_view(), name='list_sessions'),
-    path('sessions/delete/others/', SessionDelete.as_view(), name='delete_other_sessions'),
+    path('', SessionList.as_view(), name='list_sessions'),
+    path('delete/others/', SessionDelete.as_view(), name='delete_other_sessions'),
 ]
