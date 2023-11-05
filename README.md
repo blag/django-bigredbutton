@@ -8,6 +8,14 @@
 
 **django-bigredbutton** provides a big red "End All Other Sessions" button in a list of a user's current sessions.
 
+Rendered with a light theme:
+
+![light_bg](https://github.com/blag/django-bigredbutton/assets/597113/3504d235-3750-4354-a35c-78e628a3e248)
+
+Rendered with a dark theme:
+
+![dark_bg](https://github.com/blag/django-bigredbutton/assets/597113/33f8405d-4b24-4f96-b1a5-e028de0abf84)
+
 It can work with multiple session backends, and includes built-in templates for both [django-qsessions](https://pypi.org/project/django-qsessions) and [django-user-sessions](https://pypi.org/project/django-user-sessions), and dynamically switches between them depending on which one is identified in `settings.SESSION_ENGINE`.
 
 ## Compatibility
