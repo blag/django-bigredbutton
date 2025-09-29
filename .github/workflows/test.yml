@@ -16,6 +16,9 @@ jobs:
       - name: Install latest version of Poetry
         run: |
           pipx install poetry
+          echo "/root/.local/bin" >> $GITHUB_PATH
+          echo "GITHUB_PATH:"
+          cat $GITHUB_PATH
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
