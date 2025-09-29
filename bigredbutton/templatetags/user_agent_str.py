@@ -10,13 +10,14 @@ register = template.Library()
 
 @register.simple_tag(name="ua_str")
 def ua_str(
-    ua: UserAgent,
+    ua: str | UserAgent,
     include_os: bool = False,
     include_versions: bool = False,
 ) -> Optional[str]:
     """
     Return a human-readable string that summarizes a user agent from python-user-agents
     """
+    ua = UserAgent(ua) if isinstance(ua, str) else ua
     if ua:
         browser = ua_browser(ua.browser, include_version=include_versions) if ua.browser else None
         os = ua_os(ua.os, include_version=include_versions) if include_os and ua.os else None
