@@ -1,9 +1,9 @@
+name: PyPI Publish
+
 on:
   release:
     types:
       - published
-
-name: PyPI Publish
 
 jobs:
   publish:
