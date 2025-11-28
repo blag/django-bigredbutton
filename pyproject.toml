@@ -37,6 +37,10 @@ dependencies = [
     "user-agents>=2.2.0",
 ]
 
+[project.optional-dependencies]
+qsessions = ["django-qsessions>=1.1.4"]
+user-sessions = ["django-user-sessions>=2.0.0"]
+
 [dependency-groups]
 qsessions = ["django-qsessions>=1.1.4"]
 user-sessions = ["django-user-sessions>=2.0.0"]

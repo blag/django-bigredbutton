@@ -350,6 +350,14 @@ dependencies = [
     { name = "user-agents" },
 ]
 
+[package.optional-dependencies]
+qsessions = [
+    { name = "django-qsessions" },
+]
+user-sessions = [
+    { name = "django-user-sessions" },
+]
+
 [package.dev-dependencies]
 qsessions = [
     { name = "django-qsessions" },
@@ -368,8 +376,11 @@ user-sessions = [
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = ">=4.0" },
+    { name = "django-qsessions", marker = "extra == 'qsessions'", specifier = ">=1.1.4" },
+    { name = "django-user-sessions", marker = "extra == 'user-sessions'", specifier = ">=2.0.0" },
     { name = "user-agents", specifier = ">=2.2.0" },
 ]
+provides-extras = ["qsessions", "user-sessions"]
 
 [package.metadata.requires-dev]
 qsessions = [{ name = "django-qsessions", specifier = ">=1.1.4" }]
