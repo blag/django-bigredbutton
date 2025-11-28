@@ -10,7 +10,7 @@ include = ["bigredbutton"]
 
 [project]
 name = "django-bigredbutton"
-version = "0.3.2"
+version = "0.3.3"
 description = "Django app that offers a big red button to sign out of all other user sessions"
 authors = [{ name = "blag", email = "blag@users.noreply.github.com" }]
 requires-python = ">=3.11"
