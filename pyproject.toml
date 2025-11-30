@@ -1,13 +1,21 @@
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry]
+[tool.hatch.build.targets.sdist]
+include = ["bigredbutton"]
+
+[tool.hatch.build.targets.wheel]
+include = ["bigredbutton"]
+
+[project]
 name = "django-bigredbutton"
-version = "0.3.2"
+version = "0.3.3"
 description = "Django app that offers a big red button to sign out of all other user sessions"
-authors = ["blag <blag@users.noreply.github.com>"]
+authors = [{ name = "blag", email = "blag@users.noreply.github.com" }]
+requires-python = ">=3.11"
 readme = "README.md"
+license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -16,7 +24,6 @@ classifiers = [
     "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.11",
@@ -24,29 +31,33 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP :: Session",
     "Topic :: Security",
 ]
-packages = [
-	{include = "bigredbutton"},
+dependencies = [
+    "django>=4.0",
+    # Also required by django-qsessions, but we use types provided from it, so we require it as well
+    "user-agents>=2.2.0",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.11"
-django = ">=4.0"
-# Also required by django-qsessions, but we use types provided from it, so we require it as well
-user-agents = ">=2.2.0"
+[project.optional-dependencies]
+qsessions = ["django-qsessions>=1.1.4"]
+user-sessions = ["django-user-sessions>=2.0.0"]
 
-[tool.poetry.group.qsessions.dependencies]
-django-qsessions = ">=1.1.4"
+[dependency-groups]
+qsessions = ["django-qsessions>=1.1.4"]
+user-sessions = ["django-user-sessions>=2.0.0"]
+test = [
+    "coverage[toml]>=7.3.2,<8",
+    "geoip2>=4.7.0",
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-django>=4.6.0",
+]
 
-[tool.poetry.group.user-sessions.dependencies]
-django-user-sessions = ">=2.0.0"
-
-[tool.poetry.group.test.dependencies]
-aiohttp = ">=3.9.0b0"  # transitive dependency, previous versions are broken on Python 3.11/3.12
-coverage = {extras = ["toml"], version = "^7.3.2"}
-geoip2 = ">=4.7.0"
-pytest = ">=7.4.3"
-pytest-cov = ">=4.1.0"
-pytest-django = ">=4.6.0"
+[tool.uv]
+default-groups = [
+    "qsessions",
+    "user-sessions",
+    "test",
+]
 
 [tool.coverage.run]
 branch = true

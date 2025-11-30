@@ -5,6 +5,10 @@ on:
     types:
       - published
 
+env:
+  PYTHON_VERSION: "3.12"
+  UV_SYSTEM_PYTHON: 1
+
 jobs:
   publish:
     name: Upload release to PyPI
@@ -16,34 +20,31 @@ jobs:
       id-token: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install latest version of Poetry
-        run: |
-          pipx install poetry
-          echo "/root/.local/bin" >> $GITHUB_PATH
-          echo "GITHUB_PATH:"
-          cat $GITHUB_PATH
-      - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
-          python-version: "3.12"
-          cache: poetry
-          cache-dependency-path: pyproject.toml
-      - name: Get Poetry version
+          # Install the latest version of uv
+          # version:
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: false
+      - name: Add version to environment vars
         run: |
-          echo "GITHUB_PATH:"
-          cat $GITHUB_PATH
-          poetry --version
-      - name: Check pyproject.toml validity
-        run: poetry check --no-interaction
-      - name: Install dependencies
+          PROJECT_VERSION=$(uv version --short)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+      - name: Restore distribution files cache
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            dist/django_bigredbutton-${{ env.PROJECT_VERSION }}-py3-none-any.whl
+            dist/django_bigredbutton-${{ env.PROJECT_VERSION }}.tar.gz
+          key: build-distributions-${{ env.PROJECT_VERSION }}
+      - name: List distribution files
         run: |
-          poetry config virtualenvs.in-project true
-          poetry install --no-interaction
-      - name: Build package
-        run: |
-          poetry build
+          ls -l dist/*.whl dist/*.tar.gz
       - name: Publish package to PyPI
+        if: steps.cache-restore.outputs.cache-hit != 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           print-hash: true

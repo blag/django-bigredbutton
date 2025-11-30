@@ -35,6 +35,10 @@ It can work with multiple session backends, and includes built-in templates for 
    poetry add django-bigredbutton
    ```
 
+   ```sh
+   uv add django-bigredbutton
+   ```
+
 2. Add a session backend, like django-qsessions or django-user-sessions. You can
    use the optional packaging shortcuts:
 
@@ -47,11 +51,19 @@ It can work with multiple session backends, and includes built-in templates for 
    ```
 
    ```sh
+   uv add 'django-bigredbutton[qsessions]'
+   ```
+
+   ```sh
    pip install 'django-bigredbutton[user-sessions]'
    ```
 
    ```sh
    poetry add 'django-bigredbutton[user-sessions]'
+   ```
+
+   ```sh
+   uv add 'django-bigredbutton[user-sessions]'
    ```
 
    But there may be additional steps required for each session backend. Refer
