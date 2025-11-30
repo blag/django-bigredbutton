@@ -44,7 +44,6 @@ jobs:
         run: |
           ls -l dist/*.whl dist/*.tar.gz
       - name: Publish package to PyPI
-        if: steps.cache-restore.outputs.cache-hit != 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           print-hash: true
