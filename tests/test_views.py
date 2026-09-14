@@ -1,9 +1,9 @@
 from datetime import timedelta
 
 from django.contrib.auth.models import User
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils.timezone import now
-from django.test import Client, TestCase
 
 
 class ViewsTest(TestCase):
