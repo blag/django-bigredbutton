@@ -11,7 +11,7 @@ class BigRedButtonConfig(AppConfig):
     @register()
     def check_session_engine(app_configs, **kwargs):
         errors = []
-        if session_engine := getattr(settings, "SESSION_ENGINE"):
+        if session_engine := settings.SESSION_ENGINE:
             engine_name = session_engine.split('.')[0]
             engine = Engine.get_default()
             try:
