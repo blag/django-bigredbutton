@@ -1,10 +1,7 @@
-from typing import Optional
-
-from user_agents.parsers import Browser, Device, OperatingSystem, UserAgent
 
 from django import template
 from django.utils.translation import gettext_lazy as _
-
+from user_agents.parsers import Browser, Device, OperatingSystem, UserAgent
 
 register = template.Library()
 
@@ -13,7 +10,7 @@ def ua_str(
     ua: str | UserAgent,
     include_os: bool = False,
     include_versions: bool = False,
-) -> Optional[str]:
+) -> str | None:
     """
     Return a human-readable string that summarizes a user agent from python-user-agents
     """
@@ -46,7 +43,7 @@ def ua_str(
 def ua_browser(
     ua_browser: Browser,
     include_version: bool = False,
-) -> Optional[str]:
+) -> str | None:
     """
     Return a human-readable string that summarizes the browser from a user agent
     """
@@ -64,7 +61,7 @@ def ua_browser(
 def ua_os(
     ua_os: OperatingSystem,
     include_version: bool = False,
-) -> Optional[str]:
+) -> str | None:
     if include_version and ua_os.version_string:
         return _("{os} {version}").format(
             os=ua_os.family,
@@ -78,7 +75,7 @@ def ua_os(
 @register.simple_tag(name="ua_device")
 def ua_device(
     ua_device: Device,
-) -> Optional[str]:
+) -> str | None:
     if ua_device.brand and ua_device.model:
         return _("{brand} {model}").format(
             brand=ua_device.brand,
